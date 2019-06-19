@@ -114,11 +114,11 @@ int send_message(int sock, s_data sData) /* 메시지 전송 쓰레드 실행 �
 
     write(sock,(void*)&recv_data,sizeof(recv_data));
 
-    memset(&sData, 0, sizeof(sData));
-    read(sock, (void*)&sData, sizeof(sData));
+    memset(&recv_data, 0, sizeof(recv_data));
+    read(sock, (void*)&recv_data, sizeof(recv_data));
 
-    printf("sData.flag = %d\n",sData.flag);
-    return sData.flag;
+    printf("recv_data.flag = %d\n",recv_data.flag);
+    return recv_data.flag;
 //    while(1) {
 //        sdata.flag = 0;
 //        sdata.passok = passok;
