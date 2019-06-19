@@ -185,7 +185,7 @@ void wiringPi_Init(){
    pinMode(COLOR_S3,OUTPUT);
    pinMode(COLOR_OUT,INPUT);
    pinMode(COLOR_LED,OUTPUT);
-   pinMode(BUZZER, OUTPUR);
+   pinMode(BUZZER, OUTPUT);
 
    digitalWrite(LED_RED,0);
    digitalWrite(LED_GREEN,0);
