@@ -103,14 +103,7 @@ void * clnt_connection(void *arg)
                 write(clnt_sock, (void*)&sData, sizeof(sData));
             }
         }
-        else if(sData.flag == 2){ //보안 카드가 입력됨 -> 보안 해제
-            memset(sData.message, 0, BUFSIZE);
-            strcpy(sData.message, "Security card entered. Unsecure");
-            sData.flag = 2;
-            write(clnt_sock, (void*)&sData, sizeof(sData));
-        }
 
-//        send_message(message, str_len);
         memset(message, 0x00, BUFSIZE);
         memset(sendmsg, 0x00, BUFSIZE);
         memset(&sData, 0, sizeof(s_data));

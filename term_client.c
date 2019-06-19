@@ -270,15 +270,22 @@ void *card_input(void *arg) {
     while(1) {
         sleep(5);
 
-        if(count_p <= 5) continue;
+        if(passok == 0) continue;
         if(countR>500 && countR>countG && countR>countB)
         {
             // admin card
+            printf("Card Authentication Complete\n");
             count_p = 0;
             pir_flag = 0;
+            passok = 0;
             digitalWrite(LED_RED,0);
             digitalWrite(LED_BLUE,0);
             digitalWrite(LED_GREEN,1);
+
+            s_data sData; memset(&sData, 0, sizeof(s_data));
+            sData.flag = 2;
+            strcpy(sData.message, "Card Authentication Complete");
+            write((int)arg, (void*)&sData, sizeof(sData));
         }
     }
     return NULL;
