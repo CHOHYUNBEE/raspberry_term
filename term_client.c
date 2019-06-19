@@ -103,7 +103,7 @@ int main(int argc, char **argv)
 
 s_data send_message(int sock, s_data sData) /* 메시지 전송 쓰레드 실행 함수 */
 {
-    write(sock,(void*)&sdata,sizeof(sdata));
+    write(sock,(void*)&sData,sizeof(sData));
 
     s_data recv_data; memset(&recv_data, 0, sizeof(s_data));
     read(sock, (void*)&recv_data, sizeof(recv_data));
