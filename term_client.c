@@ -251,20 +251,6 @@ void *led(void *arg)
             }
 
         }
-//        else if(sData.flag == 2)
-//        {
-//            // nomal
-//            digitalWrite(LED_RED,0);
-//            digitalWrite(LED_BLUE,1);
-//            digitalWrite(LED_GREEN,0);
-//        }
-//        else
-//        {
-//            // nomal
-//            digitalWrite(LED_RED,0);
-//            digitalWrite(LED_BLUE,1);
-//            digitalWrite(LED_GREEN,0);
-//        }
     }
 }
 
