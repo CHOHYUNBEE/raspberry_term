@@ -224,7 +224,6 @@ void *led(void *arg)
         if(countR>500 && countR>countG && countR>countB)
         {
             // admin card
-            passok = 0;
             digitalWrite(LED_RED,0);
             digitalWrite(LED_BLUE,0);
             digitalWrite(LED_GREEN,1);
@@ -236,19 +235,26 @@ void *led(void *arg)
 
         if(count_p>=5)
         {
-            // warning
-            passok=1;
-
             digitalWrite(LED_RED,1);
             digitalWrite(LED_GREEN,0);
             digitalWrite(LED_BLUE,0);
 
             s_data sData; memset(&sData, 0, sizeof(s_data));
             strcpy(sData.message, "Warning");
+
             send_message((int)arg, sData);
 
             printf("sdata.flag = %d\n", sData.flag);
             printf("sdata.msg = %s\n", sData.message);
+
+            if(sData.flag == 1)
+            {
+                count_p = 0;
+                digitalWrite(LED_RED,0);
+                digitalWrite(LED_BLUE,1);
+                digitalWrite(LED_GREEN,0);
+                continue;
+            }
 
         }
 //        else if(sData.flag == 2)

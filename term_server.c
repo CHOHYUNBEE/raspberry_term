@@ -92,7 +92,7 @@ void * clnt_connection(void *arg)
             if (strcmp(message, "1457\n") == 0) { //경고 모드 해제
                 memset(sData.message, 0, BUFSIZE);
                 strcpy(sData.message, "Undo Warning Mode");
-                sData.flag = 2;
+                sData.flag = 1;
 
                 write(clnt_sock, (void*)&sData, sizeof(sData));
             }
