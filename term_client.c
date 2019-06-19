@@ -31,7 +31,7 @@ typedef struct senddata
     int flag;
 }s_data;
 
-s_data send_message(int sock, s_data sData);
+int send_message(int sock, s_data sData);
 void * recv_message(void *arg);
 void error_handling(char *message);
 void wiringPi_Init();
@@ -101,9 +101,9 @@ int main(int argc, char **argv)
     return 0;
 }
 
-s_data send_message(int sock, s_data sData) /* 메시지 전송 쓰레드 실행 함수 */
+int send_message(int sock, s_data sData) /* 메시지 전송 쓰레드 실행 함수 */
 {
-    write(sock,(void*)&sData,sizeof(sData));
+    write(sock,(void*)&sData,sizeof(*sData));
 
     s_data recv_data; memset(&recv_data, 0, sizeof(s_data));
     read(sock, (void*)&recv_data, sizeof(recv_data));
@@ -118,7 +118,7 @@ s_data send_message(int sock, s_data sData) /* 메시지 전송 쓰레드 실행
     memset(&sData, 0, sizeof(sData));
     read(sock, (void*)&sData, sizeof(sData));
 
-    return sData;
+    return sData.flag;
 //    while(1) {
 //        sdata.flag = 0;
 //        sdata.passok = passok;
@@ -242,12 +242,12 @@ void *led(void *arg)
             s_data sData; memset(&sData, 0, sizeof(s_data));
             strcpy(sData.message, "Warning");
 
-            send_message((int)arg, sData);
+            int recv_flag = send_message((int)arg, sData);
 
             printf("sdata.flag = %d\n", sData.flag);
             printf("sdata.msg = %s\n", sData.message);
 
-            if(sData.flag == 1)
+            if(recv_flag == 1)
             {
                 count_p = 0;
                 digitalWrite(LED_RED,0);
