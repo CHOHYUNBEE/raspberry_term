@@ -83,7 +83,7 @@ int main(int argc, char **argv)
     if(connect(sock, (struct sockaddr*)&serv_addr, sizeof(serv_addr))==-1) {
         error_handling("connect() error");
     }
-
+    printf("after\n");
     wiringPi_Init();
 
     pthread_create(&rcv_thread, NULL, recv_message, (void*)sock);
@@ -180,6 +180,7 @@ void *pir()
 
 void *led(void *arg)
 {
+    printf("start\n");
     pinMode(LED_RED,OUTPUT);
     pinMode(LED_GREEN,OUTPUT);
     pinMode(LED_BLUE,OUTPUT);

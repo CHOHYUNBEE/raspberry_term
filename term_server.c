@@ -98,6 +98,7 @@ int main(int argc, char **argv)
         clnt_addr_size = sizeof(clnt_addr);
         clnt_sock = accept(serv_sock, (struct sockaddr*)&clnt_addr, &clnt_addr_size);
         inet_ntop(AF_INET, &clnt_addr.sin_addr, ipaddress, INET_ADDRSTRLEN); //ip address
+        printf("새로운 연결, 클라이언트 IP : %s \n", inet_ntoa(clnt_addr.sin_addr));
 
         acctime = what_time();
         fputs(acctime, fp);
