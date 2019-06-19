@@ -218,11 +218,16 @@ void *led(void *arg)
 
 void *card_input(void *arg) {
     while(1) {
-        sleep(5);
+        sleep(2);
 
-        if(passok == 0) continue;
         if(countR>500 && countR>countG && countR>countB)
         {
+            digitalWrite(LED_RED,0);
+            digitalWrite(LED_BLUE,0);
+            digitalWrite(LED_GREEN,1);
+
+            if(passok == 0) continue;
+
             // admin card
             printf("Card Authentication Complete\n");
             count_p = 0;
