@@ -117,7 +117,6 @@ int send_message(int sock, s_data sData) /* 메시지 전송 쓰레드 실행 �
     memset(&recv_data, 0, sizeof(recv_data));
     read(sock, (void*)&recv_data, sizeof(recv_data));
 
-    printf("recv_data.flag = %d\n",recv_data.flag);
     return recv_data.flag;
 //    while(1) {
 //        sdata.flag = 0;
@@ -235,6 +234,7 @@ void *led(void *arg)
 
         if(count_p>=5)
         {
+            passok = 1;
             digitalWrite(LED_RED,1);
             digitalWrite(LED_GREEN,0);
             digitalWrite(LED_BLUE,0);
@@ -244,14 +244,10 @@ void *led(void *arg)
 
             int recv_flag = send_message((int)arg, sData);
 
-            printf("recv_flag = %d\n", recv_flag);
-            printf("count_p = %d\n",count_p);
-
             if(recv_flag == 1)
             {
-                printf("count_p2 = %d\n",count_p);
-
                 count_p = 0;
+                passok = 0;
                 digitalWrite(LED_RED,0);
                 digitalWrite(LED_BLUE,1);
                 digitalWrite(LED_GREEN,0);

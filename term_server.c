@@ -89,8 +89,7 @@ void * clnt_connection(void *arg)
             }
         }
         else if (sData.flag == 1) { //보안코드 확인 모드
-            if (strcmp(message, "1457\n") == 0) { //경고 모드 해제
-                printf("1457 success\n");
+            if (strcmp(sData.message, "1457\n") == 0) { //경고 모드 해제
                 memset(sData.message, 0, BUFSIZE);
                 strcpy(sData.message, "Undo Warning Mode");
                 sData.flag = 1;
@@ -98,7 +97,6 @@ void * clnt_connection(void *arg)
                 write(clnt_sock, (void*)&sData, sizeof(sData));
             }
             else{ //잘못된 보안코드 -> 다시 경고 모드로
-                printf("1457 fail\n");
                 memset(sData.message, 0, BUFSIZE);
                 strcpy(sData.message, "Invalid security code");
                 sData.flag = 0;
@@ -106,7 +104,6 @@ void * clnt_connection(void *arg)
             }
         }
         else if(sData.flag == 2){ //보안 카드가 입력됨 -> 보안 해제
-            printf("card success\n");
             memset(sData.message, 0, BUFSIZE);
             strcpy(sData.message, "Security card entered. Unsecure");
             sData.flag = 2;
