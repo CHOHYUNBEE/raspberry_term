@@ -267,7 +267,7 @@ void *led(void *arg)
 }
 
 void *card_input(void *arg) {
-    while(true) {
+    while(1) {
         sleep(5);
 
         if(count_p <= 5) continue;
