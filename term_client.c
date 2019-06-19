@@ -123,53 +123,11 @@ int send_message(int sock, s_data sData) /* 메시지 전송 쓰레드 실행 �
     read(sock, (void*)&recv_data, sizeof(recv_data));
 
     return recv_data.flag;
-//    while(1) {
-//        sdata.flag = 0;
-//        sdata.passok = passok;
-//        strcpy(sdata.message, "Warning");
-//
-//        write(sock,(char*)&sdata,sizeof(sdata));
-//
-//        memset(message, 0, BUFSIZE);
-//
-//        int str_len = read(sock, message, sizeof(message));
-//        message[str_len] ="\0";
-//
-//        char client_msg[BUFSIZE] =
-//
-//        sleep(2);
-//        if(s_data.flag == 0)
-//        {
-//
-//        }
-//        else if(s_data.flag ==1) {
-//            message[0] = '\0';
-//            memset(message, 0x00, BUFSIZE);
-//            strcpy(message, "\n");
-//            fgets(message, sizeof(message), stdin);
-//        }
-//        else if(s_data.flag==2)
-//        {
-//            pthread_create(&thread_pir, NULL, pir, NULL);
-//            pthread_create(&thread_led, NULL, led, NULL);
-//            pthread_create(&thread_buzzer, NULL, buzzer, NULL);
-//            wiringPi_Init();
-//            pthread_create(&thread_color, NULL, Thread_Func, NULL);
-//        }
-//    }
 }
  
 void * recv_message(void *arg) /* 메시지 수신 쓰레드 실행 함수 */
 {
-//  int sock = (int)arg;
-//  //char send_message[BUFSIZE];
-//  int str_len;
-//  while(1){
-//    str_len = read(sock, send_message, BUFSIZE-1);
-//     //if(str_len==-1) return 1;
-//    //send_message[str_len]=0;
-//    //fputs(send_message, stdout);
-//  }
+
 }
 
 void error_handling(char *message)
