@@ -112,7 +112,7 @@ s_data send_message(int sock, s_data sData) /* 메시지 전송 쓰레드 실행
     memset(recv_data.message, 0, BUFSIZE);
     fgets(recv_data.message, BUFSIZE, stdin);
 
-    write(sock,(void*)&recv_data,sizeof(send_data));
+    write(sock,(void*)&recv_data,sizeof(recv_data));
 
     memset(&sData, 0, sizeof(sData));
     read(sock, (void*)&sData, sizeof(sData));
