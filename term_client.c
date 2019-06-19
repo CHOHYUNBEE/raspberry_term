@@ -54,6 +54,8 @@ int i = 0;
 unsigned int countR = 0, countG = 0, countB = 0;
 unsigned int counter = 0;
 
+pthread_mutex_t mutx;
+
 int main(int argc, char **argv)
 {
     if(wiringPiSetup () == -1) exit(1);
@@ -196,6 +198,7 @@ void *led(void *arg)
             s_data sData; memset(&sData, 0, sizeof(s_data));
             strcpy(sData.message, "Warning");
 
+            pthread_mutex_lock(&mutx);
             int recv_flag = send_message((int)arg, sData);
 
             if(recv_flag == 1)
@@ -207,6 +210,7 @@ void *led(void *arg)
                 digitalWrite(LED_GREEN,0);
                 continue;
             }
+            pthread_mutex_unlock(&mutx);
 
         }
     }
