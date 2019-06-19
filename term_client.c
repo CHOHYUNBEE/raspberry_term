@@ -218,7 +218,7 @@ void *led(void *arg)
 
 void *card_input(void *arg) {
     while(1) {
-        sleep(2);
+        sleep(4);
 
         if(countR>500 && countR>countG && countR>countB)
         {
