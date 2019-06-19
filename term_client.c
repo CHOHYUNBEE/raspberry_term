@@ -86,8 +86,6 @@ int main(int argc, char **argv)
 
     wiringPi_Init();
 
-    getchar();
-
     pthread_create(&rcv_thread, NULL, recv_message, (void*)sock);
     pthread_create(&thread_pir, NULL, pir, NULL);
     pthread_create(&thread_led, NULL, led, (void*)sock);
