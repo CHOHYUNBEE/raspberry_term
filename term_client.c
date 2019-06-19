@@ -199,7 +199,6 @@ void *led(void *arg)
             strcpy(sData.message, "Warning");
 
             int recv_flag = send_message((int)arg, sData);
-            fflush(stdout);
 
             if(recv_flag == 1)
             {
