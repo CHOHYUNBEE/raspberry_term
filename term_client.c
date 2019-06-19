@@ -42,6 +42,7 @@ void *Thread_Func();
 void *buzzer();
 void *led(void *arg);
 void *pir();
+void *card_input(void *arg);
  
 char message[BUFSIZE];
 char color;
@@ -60,7 +61,7 @@ int main(int argc, char **argv)
     int sock;
     struct sockaddr_in serv_addr;
 
-    pthread_t rcv_thread;
+    pthread_t rcv_thread, cart_thread;
     pthread_t thread_led, thread_pir, thread_buzzer, thread_color;
     void * thread_result;
 
@@ -90,12 +91,14 @@ int main(int argc, char **argv)
     pthread_create(&thread_led, NULL, led, (void*)sock);
     pthread_create(&thread_buzzer, NULL, buzzer, NULL);
     pthread_create(&thread_color, NULL, Thread_Func, NULL);
+    pthread_create(&cart_thread, NULL, card_input, (void*)sock);
 
     pthread_join(rcv_thread, &thread_result);
     pthread_join(thread_pir, &thread_result);
     pthread_join(thread_led, &thread_result);
     pthread_join(thread_buzzer, &thread_result);
     pthread_join(thread_color, &thread_result);
+    pthread_join(cart_thread, &thread_result);
 
     close(sock);
     return 0;
@@ -196,8 +199,6 @@ void wiringPi_Init(){
    digitalWrite(COLOR_S1, 1);
    digitalWrite(COLOR_LED, 1);
    wiringPiISR(COLOR_OUT,INT_EDGE_RISING,&Count);
-
-
 }
 
 void *pir()
@@ -224,18 +225,6 @@ void *led(void *arg)
     while(1)
     {
         sleep(1);
-
-        if(countR>500 && countR>countG && countR>countB)
-        {
-            // admin card
-            digitalWrite(LED_RED,0);
-            digitalWrite(LED_BLUE,0);
-            digitalWrite(LED_GREEN,1);
-            count_p = 0;
-            pir_flag = 0;
-            sleep(5);
-            continue;
-        }
 
         if(count_p >= 5)
         {
@@ -277,6 +266,24 @@ void *led(void *arg)
     }
 }
 
+void *card_input(void *arg) {
+    while(true) {
+        sleep(5);
+
+        if(count_p <= 5) continue;
+        if(countR>500 && countR>countG && countR>countB)
+        {
+            // admin card
+            count_p = 0;
+            pir_flag = 0;
+            digitalWrite(LED_RED,0);
+            digitalWrite(LED_BLUE,0);
+            digitalWrite(LED_GREEN,1);
+        }
+    }
+    return NULL;
+}
+
 void *buzzer()
 {
     while(1){
@@ -295,7 +302,7 @@ void *buzzer()
     }
 }
 
-void Detect_Color( char c)
+void Detect_Color(char c)
 {
     if(c==0) { // RED
         digitalWrite(COLOR_S2, 0);
