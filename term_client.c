@@ -117,6 +117,7 @@ int send_message(int sock, s_data sData) /* 메시지 전송 쓰레드 실행 �
     memset(&sData, 0, sizeof(sData));
     read(sock, (void*)&sData, sizeof(sData));
 
+    printf("sData.flag = %d\n",sData.flag);
     return sData.flag;
 //    while(1) {
 //        sdata.flag = 0;
