@@ -173,7 +173,7 @@ void *pir()
        if(pir_flag == 1)
        {
          count_p++;
-         printf("count_p = %d\n")
+         printf("count_p = %d\n");
          pir_flag = 0;
        }
   }
