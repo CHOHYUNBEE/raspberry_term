@@ -113,8 +113,9 @@ int send_message(int sock, s_data sData) /* 메시지 전송 쓰레드 실행 �
     s_data recv_data; memset(&recv_data, 0, sizeof(s_data));
     read(sock, (void*)&recv_data, sizeof(recv_data));
 
-    printf("%s\ninput password : ", recv_data.message);
     fflush(stdout);
+
+    printf("%s\ninput password : ", recv_data.message);
     memset(recv_data.message, 0, BUFSIZE);
     fgets(recv_data.message, BUFSIZE, stdin);
 
@@ -223,8 +224,9 @@ void *card_input(void *arg) {
         if(countR>500 && countR>countG && countR>countB)
         {
             // admin card
-            printf("Card Authentication Complete\n");
             fflush(stdout);
+
+            printf("Card Authentication Complete\n");
             count_p = 0;
             pir_flag = 0;
             passok = 0;
