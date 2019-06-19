@@ -90,19 +90,20 @@ int main(int argc, char **argv)
         error_handling("listen() error");
     }
 
-    fp=fopen("../log.txt","a+"); //file open
-    if (fp == NULL)
-        printf ("File Open ERROR.... \n");
 
     while (1) {
+        fp=fopen("../log.txt","a+"); //file open
+        if (fp == NULL)
+            printf ("File Open ERROR.... \n");
+
         clnt_addr_size = sizeof(clnt_addr);
         clnt_sock = accept(serv_sock, (struct sockaddr*)&clnt_addr, &clnt_addr_size);
-//        inet_ntop(AF_INET, &clnt_addr.sin_addr, ipaddress, INET_ADDRSTRLEN); //ip address
 
+        fputs("\n", fp);
         acctime = what_time();
         fputs(acctime, fp);
         fputs(" [ip] ", fp);
-        fputs(ipaddress , fp);
+        fputs(inet_ntoa(clnt_addr.sin_addr) , fp);
         fputs(" connect",fp);
         fputs("\n", fp);
         fclose(fp);
@@ -147,39 +148,44 @@ void * clnt_connection(void *arg)
                 acctime = what_time();
                 fputs(acctime, fp);
                 fputs("\n Client : ", fp);
-                fputs(message, fp);
+                fputs(sData.message, fp);
                 fputs("\n Server : ", fp);
-                fputs(sendmsg, fp);
+                fputs(sData.message, fp);
 
                 write(clnt_sock, (void*)&sData, sizeof(sData));
             }
         }
         else if (sData.flag == 1) { //보안코드 확인 모드
             if (strcmp(sData.message, "1457\n") == 0) { //경고 모드 해제
+
+                sData.message[strlen(sData.message)-1] = 0;
+                acctime = what_time();
+                fputs(acctime, fp);
+                fputs("\n Client : ", fp);
+                fputs(sData.message, fp);
+
                 memset(sData.message, 0, BUFSIZE);
                 strcpy(sData.message, "Undo Warning Mode");
                 sData.flag = 1;
 
-                acctime = what_time();
-                fputs(acctime, fp);
-                fputs("\n Client : ", fp);
-                fputs(message, fp);
                 fputs("\n Server : ", fp);
-                fputs(sendmsg, fp);
+                fputs(sData.message, fp);
 
                 write(clnt_sock, (void*)&sData, sizeof(sData));
             }
             else{ //잘못된 보안코드 -> 다시 경고 모드로
+                sData.message[strlen(sData.message)-1] = 0;
+                acctime = what_time();
+                fputs(acctime, fp);
+                fputs("\n Client : ", fp);
+                fputs(sData.message, fp);
+
                 memset(sData.message, 0, BUFSIZE);
                 strcpy(sData.message, "Invalid security code");
                 sData.flag = 0;
 
-                acctime = what_time();
-                fputs(acctime, fp);
-                fputs("\n Client : ", fp);
-                fputs(message, fp);
                 fputs("\n Server : ", fp);
-                fputs(sendmsg, fp);
+                fputs(sData.message, fp);
 
                 write(clnt_sock, (void*)&sData, sizeof(sData));
             }
@@ -187,9 +193,8 @@ void * clnt_connection(void *arg)
 
         memset(message, 0x00, BUFSIZE);
         memset(sendmsg, 0x00, BUFSIZE);
-        memset(&sData, 0, sizeof(s_data));
+        memset(&sData, 0, sizeof(sData));
         fclose(fp);
-        fflush(stdout);
     }
 
     pthread_mutex_lock(&mutx);
