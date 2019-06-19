@@ -44,10 +44,10 @@ void *led(void *arg);
 void *pir();
  
 char message[BUFSIZE];
-char color = 0;
-char pir_flag = 0;
-int count_p = 0;
-int passok = 0;
+char color;
+char pir_flag;
+int count_p;
+int passok;
 int i = 0;
  
 unsigned int countR = 0, countG = 0, countB = 0;
@@ -185,6 +185,8 @@ void wiringPi_Init(){
    pinMode(COLOR_S3,OUTPUT);
    pinMode(COLOR_OUT,INPUT);
    pinMode(COLOR_LED,OUTPUT);
+   pinMode(BUZZER, OUTPUR);
+
    digitalWrite(LED_RED,0);
    digitalWrite(LED_GREEN,0);
    digitalWrite(LED_BLUE,0);
@@ -193,6 +195,8 @@ void wiringPi_Init(){
    digitalWrite(COLOR_S1, 1);
    digitalWrite(COLOR_LED, 1);
    wiringPiISR(COLOR_OUT,INT_EDGE_RISING,&Count);
+
+
 }
 
 void *pir()
@@ -232,7 +236,7 @@ void *led(void *arg)
             continue;
         }
 
-        if(count_p>=5)
+        if(count_p >= 5)
         {
             passok = 1;
             digitalWrite(LED_RED,1);
@@ -275,20 +279,18 @@ void *led(void *arg)
 void *buzzer()
 {
     while(1){
-        if(passok==0)
+        if(passok == 0)
         {
             digitalWrite(BUZZER,0);
         }
-        else if(passok==1)
+        else
         {
-            while(passok!=0)
-            {
-                digitalWrite(BUZZER,1);
-                sleep(1);
-                digitalWrite(BUZZER,0);
-                sleep(2);
-            }
+            digitalWrite(BUZZER,1);
+            sleep(1);
+            digitalWrite(BUZZER,0);
+            sleep(1);
         }
+        sleep(1);
     }
 }
 
