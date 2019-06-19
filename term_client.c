@@ -190,6 +190,7 @@ void *led(void *arg)
 
         if(count_p >= 5)
         {
+            pthread_mutex_lock(&mutx);
             passok = 1;
             digitalWrite(LED_RED,1);
             digitalWrite(LED_GREEN,0);
@@ -198,7 +199,6 @@ void *led(void *arg)
             s_data sData; memset(&sData, 0, sizeof(s_data));
             strcpy(sData.message, "Warning");
 
-            pthread_mutex_lock(&mutx);
             int recv_flag = send_message((int)arg, sData);
 
             if(recv_flag == 1)
