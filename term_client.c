@@ -155,7 +155,7 @@ void wiringPi_Init(){
 
    digitalWrite(LED_RED,0);
    digitalWrite(LED_GREEN,0);
-   digitalWrite(LED_BLUE,0);
+   digitalWrite(LED_BLUE,1);
  
    digitalWrite (COLOR_S0, 0);
    digitalWrite(COLOR_S1, 1);
