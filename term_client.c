@@ -230,8 +230,10 @@ void *led(void *arg)
             count_p = 0;
             pir_flag = 0;
             sleep(5);
+            continue;
         }
-        else if(count_p>=5)
+
+        if(count_p>=5)
         {
             // warning
             passok=1;
@@ -241,27 +243,27 @@ void *led(void *arg)
             digitalWrite(LED_BLUE,0);
 
             s_data sData; memset(&sData, 0, sizeof(s_data));
-            strcpy(sData, "Warning");
+            strcpy(sData.message, "Warning");
             send_message((int)arg, sData);
 
             printf("sdata.flag = %d\n", sData.flag);
             printf("sdata.msg = %s\n", sData.message);
 
         }
-        else if(sData.flag == 2)
-        {
-            // nomal
-            digitalWrite(LED_RED,0);
-            digitalWrite(LED_BLUE,1);
-            digitalWrite(LED_GREEN,0);
-        }
-        else
-        {
-            // nomal
-            digitalWrite(LED_RED,0);
-            digitalWrite(LED_BLUE,1);
-            digitalWrite(LED_GREEN,0);
-        }
+//        else if(sData.flag == 2)
+//        {
+//            // nomal
+//            digitalWrite(LED_RED,0);
+//            digitalWrite(LED_BLUE,1);
+//            digitalWrite(LED_GREEN,0);
+//        }
+//        else
+//        {
+//            // nomal
+//            digitalWrite(LED_RED,0);
+//            digitalWrite(LED_BLUE,1);
+//            digitalWrite(LED_GREEN,0);
+//        }
     }
 }
 
