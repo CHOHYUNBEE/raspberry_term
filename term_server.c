@@ -89,23 +89,23 @@ int main(int argc, char **argv)
     if (listen(serv_sock, 5) == -1) {
         error_handling("listen() error");
     }
-//
-//    fp=fopen("../log.txt","a+"); //file open
-//    if (fp == NULL)
-//        printf ("File Open ERROR.... \n");
+
+    fp=fopen("../log.txt","a+"); //file open
+    if (fp == NULL)
+        printf ("File Open ERROR.... \n");
 
     while (1) {
         clnt_addr_size = sizeof(clnt_addr);
         clnt_sock = accept(serv_sock, (struct sockaddr*)&clnt_addr, &clnt_addr_size);
 //        inet_ntop(AF_INET, &clnt_addr.sin_addr, ipaddress, INET_ADDRSTRLEN); //ip address
 
-//        acctime = what_time();
-//        fputs(acctime, fp);
-//        fputs(" [ip] ", fp);
-//        fputs(ipaddress , fp);
-//        fputs(" connect",fp);
-//        fputs("\n", fp);
-//        fclose(fp);
+        acctime = what_time();
+        fputs(acctime, fp);
+        fputs(" [ip] ", fp);
+        fputs(ipaddress , fp);
+        fputs(" connect",fp);
+        fputs("\n", fp);
+        fclose(fp);
 
         pthread_mutex_lock(&mutx);
         clnt_socks[clnt_number++] = clnt_sock;
@@ -135,21 +135,21 @@ void * clnt_connection(void *arg)
 
     while ((str_len = read(clnt_sock, (void*)&sData, sizeof(sData))) != 0) {
         printf("[Client : %s] %s\n", clnt->addr,sData.message);
-//        fp=fopen("../log.txt","a+"); //file open
-//        if (fp == NULL)
-//            printf ("File Open ERROR.... \n");
+        fp=fopen("../log.txt","a+"); //file open
+        if (fp == NULL)
+            printf ("File Open ERROR.... \n");
 
         if (sData.flag == 0) { //경고 모드(침입자 발생)
             if (strcmp(sData.message, "Warning") == 0) {
                 strcpy(sendmsg, "Warning message if you mistake, you enter this number /1457/\n");
                 sData.flag = 1;
 
-//                acctime = what_time();
-//                fputs(acctime, fp);
-//                fputs("\n Client : ", fp);
-//                fputs(message, fp);
-//                fputs("\n Server : ", fp);
-//                fputs(sendmsg, fp);
+                acctime = what_time();
+                fputs(acctime, fp);
+                fputs("\n Client : ", fp);
+                fputs(message, fp);
+                fputs("\n Server : ", fp);
+                fputs(sendmsg, fp);
 
                 write(clnt_sock, (void*)&sData, sizeof(sData));
             }
@@ -160,12 +160,12 @@ void * clnt_connection(void *arg)
                 strcpy(sData.message, "Undo Warning Mode");
                 sData.flag = 1;
 
-//                acctime = what_time();
-//                fputs(acctime, fp);
-//                fputs("\n Client : ", fp);
-//                fputs(message, fp);
-//                fputs("\n Server : ", fp);
-//                fputs(sendmsg, fp);
+                acctime = what_time();
+                fputs(acctime, fp);
+                fputs("\n Client : ", fp);
+                fputs(message, fp);
+                fputs("\n Server : ", fp);
+                fputs(sendmsg, fp);
 
                 write(clnt_sock, (void*)&sData, sizeof(sData));
             }
@@ -174,12 +174,12 @@ void * clnt_connection(void *arg)
                 strcpy(sData.message, "Invalid security code");
                 sData.flag = 0;
 
-//                acctime = what_time();
-//                fputs(acctime, fp);
-//                fputs("\n Client : ", fp);
-//                fputs(message, fp);
-//                fputs("\n Server : ", fp);
-//                fputs(sendmsg, fp);
+                acctime = what_time();
+                fputs(acctime, fp);
+                fputs("\n Client : ", fp);
+                fputs(message, fp);
+                fputs("\n Server : ", fp);
+                fputs(sendmsg, fp);
 
                 write(clnt_sock, (void*)&sData, sizeof(sData));
             }
@@ -188,8 +188,8 @@ void * clnt_connection(void *arg)
         memset(message, 0x00, BUFSIZE);
         memset(sendmsg, 0x00, BUFSIZE);
         memset(&sData, 0, sizeof(s_data));
-//        fclose(fp);
-//        fflush(stdout);
+        fclose(fp);
+        fflush(stdout);
     }
 
     pthread_mutex_lock(&mutx);
