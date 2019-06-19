@@ -108,10 +108,11 @@ s_data send_message(int sock, s_data sData) /* 메시지 전송 쓰레드 실행
     s_data recv_data; memset(&recv_data, 0, sizeof(s_data));
     read(sock, (void*)&recv_data, sizeof(recv_data));
 
-    printf("%s\n", recv_data.message);
+    printf("%s\ninput password : ", recv_data.message);
     memset(recv_data.message, 0, BUFSIZE);
     fgets(recv_data.message, BUFSIZE, stdin);
 
+    printf("flag = %d\n", recv_data.flag);
     write(sock,(void*)&recv_data,sizeof(recv_data));
 
     memset(&sData, 0, sizeof(sData));
