@@ -173,7 +173,6 @@ void *pir()
        if(pir_flag == 1)
        {
          count_p++;
-         printf("count_p = %d\n");
          pir_flag = 0;
        }
   }
@@ -206,10 +205,10 @@ void *led(void *arg)
             {
                 count_p = 0;
                 passok = 0;
+                recv_flag = 0;
                 digitalWrite(LED_RED,0);
                 digitalWrite(LED_BLUE,1);
                 digitalWrite(LED_GREEN,0);
-                continue;
             }
             pthread_mutex_unlock(&mutx);
 
