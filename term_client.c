@@ -45,12 +45,14 @@ int i = 0;
  
 unsigned int countR = 0, countG = 0, countB = 0;
 unsigned int counter = 0;
+
 typedef struct senddata
 {
   int passok;
   char message;
   int flag;
 }s_data;
+
 int main(int argc, char **argv)
 {
   if(wiringPiSetup () == -1)
@@ -82,46 +84,52 @@ int main(int argc, char **argv)
 }
 void * send_message(void *arg) /* 메시지 전송 쓰레드 실행 함수 */
 {
-   int sock = (int)arg;
-   struct senddata s_data;
+    int sock = (int)arg;
+    s_data sdata;
+    memset(&sdata, 0, sizeof(s_data));
   
   
-   pthread_t thread_led, thread_pir, thread_buzzer, thread_color;
-   pthread_create(&thread_pir, NULL, pir, NULL);
-   pthread_create(&thread_led, NULL, led, NULL);
-   pthread_create(&thread_buzzer, NULL, buzzer, NULL);
-   wiringPi_Init();
-   pthread_create(&thread_color, NULL, Thread_Func, NULL);
-   while(1) {
-     s_data.flag = 0;
-     s_data.passok = passok;
-     s_data.message = "Warning";
-     write(sock,(char*)&s_data,sizeof(senddata));
-     str_len = read(sock, message, sizeof(message));
-     message[str_len] ="\0";
-     s_data = (senddata*)message;
-     sleep(2);
-     if(s_data.flag == 0)
-  {
-      
-  }
-      else if(s_data.flag ==1)
-  {
-       message[0] = '\0';
-       memset(message, 0x00, BUFSIZE);
-       strcpy(message, "\n");
-       fflush(stdin);
-       fgets(message, sizeof(message), stdin);
-  }
-  else if(s_data.flag==2)
-  {
-     pthread_create(&thread_pir, NULL, pir, NULL);
-     pthread_create(&thread_led, NULL, led, NULL);
-     pthread_create(&thread_buzzer, NULL, buzzer, NULL);
-     wiringPi_Init();
-     pthread_create(&thread_color, NULL, Thread_Func, NULL);
-  }
-   }
+    pthread_t thread_led, thread_pir, thread_buzzer, thread_color;
+
+    pthread_create(&thread_pir, NULL, pir, NULL);
+    pthread_create(&thread_led, NULL, led, NULL);
+    pthread_create(&thread_buzzer, NULL, buzzer, NULL);
+    pthread_create(&thread_color, NULL, Thread_Func, NULL);
+
+    wiringPi_Init();
+
+    while(1) {
+        sdata.flag = 0;
+        sdata.passok = passok;
+        sdata.message = "Warning";
+
+        write(sock,(char*)&sdata,sizeof(sdata));
+
+        memset(message, 0, BUFSIZE);
+        str_len = read(sock, message, sizeof(message));
+        message[str_len] ="\0";
+        s_data = (senddata*)message;
+        sleep(2);
+        if(s_data.flag == 0)
+        {
+
+        }
+        else if(s_data.flag ==1) {
+            message[0] = '\0';
+            memset(message, 0x00, BUFSIZE);
+            strcpy(message, "\n");
+            fflush(stdin);
+            fgets(message, sizeof(message), stdin);
+        }
+        else if(s_data.flag==2)
+        {
+            pthread_create(&thread_pir, NULL, pir, NULL);
+            pthread_create(&thread_led, NULL, led, NULL);
+            pthread_create(&thread_buzzer, NULL, buzzer, NULL);
+            wiringPi_Init();
+            pthread_create(&thread_color, NULL, Thread_Func, NULL);
+        }
+    }
 }
  
 void * recv_message(void *arg) /* 메시지 수신 쓰레드 실행 함수 */
