@@ -115,6 +115,8 @@ int send_message(int sock, s_data sData) /* 메시지 전송 쓰레드 실행 �
     memset(recv_data.message, 0, BUFSIZE);
     fgets(recv_data.message, BUFSIZE, stdin);
 
+    if(passok == 0) return 2;
+
     write(sock,(void*)&recv_data,sizeof(recv_data));
 
     memset(&recv_data, 0, sizeof(recv_data));
