@@ -112,7 +112,6 @@ int send_message(int sock, s_data sData) /* 메시지 전송 쓰레드 실행 �
     memset(recv_data.message, 0, BUFSIZE);
     fgets(recv_data.message, BUFSIZE, stdin);
 
-    printf("flag = %d\n", recv_data.flag);
     write(sock,(void*)&recv_data,sizeof(recv_data));
 
     memset(&sData, 0, sizeof(sData));
@@ -244,11 +243,13 @@ void *led(void *arg)
 
             int recv_flag = send_message((int)arg, sData);
 
-            printf("sdata.flag = %d\n", sData.flag);
-            printf("sdata.msg = %s\n", sData.message);
+            printf("recv_flag = %d\n", recv_flag);
+            printf("count_p = %d\n",count_p);
 
             if(recv_flag == 1)
             {
+                printf("count_p2 = %d\n",count_p);
+
                 count_p = 0;
                 digitalWrite(LED_RED,0);
                 digitalWrite(LED_BLUE,1);
