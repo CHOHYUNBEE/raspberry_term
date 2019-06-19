@@ -113,8 +113,6 @@ int send_message(int sock, s_data sData) /* 메시지 전송 쓰레드 실행 �
     s_data recv_data; memset(&recv_data, 0, sizeof(s_data));
     read(sock, (void*)&recv_data, sizeof(recv_data));
 
-    fflush(stdout);
-
     printf("%s\ninput password : ", recv_data.message);
     memset(recv_data.message, 0, BUFSIZE);
     fgets(recv_data.message, BUFSIZE, stdin);
@@ -201,6 +199,7 @@ void *led(void *arg)
             strcpy(sData.message, "Warning");
 
             int recv_flag = send_message((int)arg, sData);
+            fflush(stdout);
 
             if(recv_flag == 1)
             {
@@ -224,8 +223,6 @@ void *card_input(void *arg) {
         if(countR>500 && countR>countG && countR>countB)
         {
             // admin card
-            fflush(stdout);
-
             printf("Card Authentication Complete\n");
             count_p = 0;
             pir_flag = 0;
