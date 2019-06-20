@@ -150,7 +150,8 @@ void * clnt_connection(void *arg)
                 fputs("\n Client : ", fp);
                 fputs(sData.message, fp);
                 fputs("\n Server : ", fp);
-                fputs(sData.message, fp);
+                fputs(sendmsg, fp);
+                strcpy(sData.message,sendmsg);
 
                 write(clnt_sock, (void*)&sData, sizeof(sData));
             }
@@ -169,7 +170,8 @@ void * clnt_connection(void *arg)
                 sData.flag = 1;
 
                 fputs("\n Server : ", fp);
-                fputs(sData.message, fp);
+                fputs(sendmsg, fp);
+                strcpy(sData.message,sendmsg);
 
                 write(clnt_sock, (void*)&sData, sizeof(sData));
             }
@@ -185,7 +187,8 @@ void * clnt_connection(void *arg)
                 sData.flag = 0;
 
                 fputs("\n Server : ", fp);
-                fputs(sData.message, fp);
+                fputs(sendmsg, fp);
+                strcpy(sData.message,sendmsg);
 
                 write(clnt_sock, (void*)&sData, sizeof(sData));
             }
