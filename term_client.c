@@ -204,8 +204,11 @@ void *led(void *arg)
             digitalWrite(LED_GREEN,0);
             digitalWrite(LED_BLUE,0);
 
-            s_data sData; memset(&sData, 0, sizeof(s_data));
-            strcpy(sData.message, "Warning");
+            s_data sData;
+            if(strcmp(sData.message, "Undo Warning Mode")!=0 &&strcmp(sData.message, "Invalid security code")!=0) {
+                memset(&sData, 0, sizeof(s_data));
+                strcpy(sData.message, "Warning");
+            }
 
             int recv_flag = send_message((int)arg, sData);
 
