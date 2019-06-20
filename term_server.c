@@ -142,13 +142,15 @@ void * clnt_connection(void *arg)
 
         if (sData.flag == 0) { //경고 모드(침입자 발생)
             if (strcmp(sData.message, "Warning") == 0) {
-                strcpy(sendmsg, "Warning message if you mistake, you enter this number /1457/\n");
-                sData.flag = 1;
-
                 acctime = what_time();
                 fputs(acctime, fp);
                 fputs("\n Client : ", fp);
                 fputs(sData.message, fp);
+
+                memset(sData.message, 0, sizeof(sData.message));
+                strcpy(sData.message, "Warning message if you mistake, you enter this number /1457/\n");
+                sData.flag = 1;
+
                 fputs("\n Server : ", fp);
                 fputs(sData.message, fp);
 
@@ -165,7 +167,7 @@ void * clnt_connection(void *arg)
                 fputs(sData.message, fp);
 
                 memset(sData.message, 0, BUFSIZE);
-                strcpy(sData.message, "Undo Warning Mode");
+                strcpy(sendmsg, "Undo Warning Mode");
                 sData.flag = 1;
 
                 fputs("\n Server : ", fp);
@@ -181,7 +183,7 @@ void * clnt_connection(void *arg)
                 fputs(sData.message, fp);
 
                 memset(sData.message, 0, BUFSIZE);
-                strcpy(sData.message, "Invalid security code");
+                strcpy(sendmsg, "Invalid security code");
                 sData.flag = 0;
 
                 fputs("\n Server : ", fp);

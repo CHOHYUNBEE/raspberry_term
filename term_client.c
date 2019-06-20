@@ -124,6 +124,8 @@ int send_message(int sock, s_data sData) /* 메시지 전송 쓰레드 실행 �
     memset(&recv_data, 0, sizeof(recv_data));
     read(sock, (void*)&recv_data, sizeof(recv_data));
 
+    printf("%s",recv_data.message);
+
     return recv_data.flag;
 }
 
