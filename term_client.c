@@ -267,6 +267,7 @@ void *card_input(void *arg) {
     return NULL;
 }
 
+
 void *buzzer()
 {
     while(1){
