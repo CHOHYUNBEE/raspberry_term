@@ -245,7 +245,6 @@ void *card_input(void *arg) {
 
             // admin card
             printf("\nCard Authentication Complete\n");
-            printf("length : %d\n", strlen(sData.message));
             count_p = 0;
             pir_flag = 0;
             passok = 0;
@@ -254,8 +253,9 @@ void *card_input(void *arg) {
             digitalWrite(LED_GREEN,1);
 
             s_data sData; memset(&sData, 0, sizeof(s_data));
-            sData.flag = 2;
+            sData.flag = 1;
             strcpy(sData.message, "Card Authentication Complete");
+            printf("length : %d\n", strlen(sData.message));
             write((int)arg, (void*)&sData, sizeof(sData));
         }
     }
