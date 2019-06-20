@@ -122,6 +122,7 @@ int send_message(int sock, s_data sData) /* 메시지 전송 쓰레드 실행 �
         }
     }
     printf("%s\n", recv_data.message);
+    printf("%d\n", recv_data.flag);
 
     if(passok == 0) return 2;
 
@@ -194,7 +195,7 @@ void *led(void *arg)
     {
         sleep(1);
 
-        if(count_p >= 20)
+        if(count_p >= 15)
         {
             pthread_mutex_lock(&mutx);
             passok = 1;
