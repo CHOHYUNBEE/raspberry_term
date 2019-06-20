@@ -196,7 +196,6 @@ void * clnt_connection(void *arg)
 
                 fputs("\n Server : ", fp);
                 fputs(sendmsg, fp);
-                strcpy(sData.message,sendmsg);
 
                 write(clnt_sock, (void*)&sData, sizeof(sData));
             }

@@ -109,7 +109,7 @@ int main(int argc, char **argv)
 int send_message(int sock, s_data sData) /* 메시지 전송 쓰레드 실행 함수 */
 {
     write(sock, (void *) &sData, sizeof(sData));
-    printf("flag : %d\n", sData.flag);
+    printf("1. flag : %d\n", sData.flag);
     s_data recv_data;
     memset(&recv_data, 0, sizeof(s_data));
     read(sock, (void *) &recv_data, sizeof(recv_data));
@@ -117,8 +117,7 @@ int send_message(int sock, s_data sData) /* 메시지 전송 쓰레드 실행 �
     if (strcmp(recv_data.message, "Warning message if you mistake, you enter this number /1457/\n") == 0) {
         if( strcpy(sData.message, "Card Authentication Complete")!=0) {
             printf("%s\n", recv_data.message);
-            printf("flag : %d\n", recv_data.flag);
-            printf("length : %d\n", strlen(sData.message));
+            printf("2. flag : %d\n", recv_data.flag);
             printf("input password : ");
             memset(recv_data.message, 0, BUFSIZE);
             fgets(recv_data.message, BUFSIZE, stdin);
@@ -131,7 +130,7 @@ int send_message(int sock, s_data sData) /* 메시지 전송 쓰레드 실행 �
         printf("%s\n", recv_data.message);
 
     }
-    printf("flag : %d\n", recv_data.flag);
+    printf("3. flag : %d\n", recv_data.flag);
 
     if(passok == 0) return 2;
 
