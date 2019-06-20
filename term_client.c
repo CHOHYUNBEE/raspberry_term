@@ -10,7 +10,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <pthread.h>
- 
+
 #define BUFSIZE 100
 #define COLOR_S0 0
 #define COLOR_S1 1
@@ -43,14 +43,14 @@ void *buzzer();
 void *led(void *arg);
 void *pir();
 void *card_input(void *arg);
- 
+
 char message[BUFSIZE];
 char color;
 char pir_flag;
 int count_p;
 int passok;
 int i = 0;
- 
+
 unsigned int countR = 0, countG = 0, countB = 0;
 unsigned int counter = 0;
 
@@ -108,29 +108,14 @@ int main(int argc, char **argv)
 
 int send_message(int sock, s_data sData) /* 메시지 전송 쓰레드 실행 함수 */
 {
-    write(sock, (void *) &sData, sizeof(sData));
-    printf("1. flag : %d\n", sData.flag);
-    s_data recv_data;
-    memset(&recv_data, 0, sizeof(s_data));
-    read(sock, (void *) &recv_data, sizeof(recv_data));
+    write(sock,(void*)&sData,sizeof(sData));
 
-    if (strcmp(recv_data.message, "Warning message if you mistake, you enter this number /1457/\n") == 0) {
-        if( strcpy(sData.message, "Card Authentication Complete")!=0) {
-            printf("%s\n", recv_data.message);
-            printf("2. flag : %d\n", recv_data.flag);
-            printf("input password : ");
-            memset(recv_data.message, 0, BUFSIZE);
-            fgets(recv_data.message, BUFSIZE, stdin);
-        }
-        if(strcmp(recv_data.message, "Undo Warning Mode") ==0 || strcmp(recv_data.message, "Invalid security code") ==0 ){
-            printf("%s\n", recv_data.message);
-        }
-    }
-    if(strcmp(recv_data.message, "Undo Warning Mode") ==0 || strcmp(recv_data.message, "Invalid security code") ==0 ){
-        printf("%s\n", recv_data.message);
+    s_data recv_data; memset(&recv_data, 0, sizeof(s_data));
+    read(sock, (void*)&recv_data, sizeof(recv_data));
 
-    }
-    printf("3. flag : %d\n", recv_data.flag);
+    printf("%s\ninput password : ", recv_data.message);
+    memset(recv_data.message, 0, BUFSIZE);
+    fgets(recv_data.message, BUFSIZE, stdin);
 
     if(passok == 0) return 2;
 
@@ -141,7 +126,7 @@ int send_message(int sock, s_data sData) /* 메시지 전송 쓰레드 실행 �
 
     return recv_data.flag;
 }
- 
+
 void * recv_message(void *arg) /* 메시지 수신 쓰레드 실행 함수 */
 {
 
@@ -149,9 +134,9 @@ void * recv_message(void *arg) /* 메시지 수신 쓰레드 실행 함수 */
 
 void error_handling(char *message)
 {
-  fputs(message, stderr);
-  fputc('\n', stderr);
-  exit(1);
+    fputs(message, stderr);
+    fputc('\n', stderr);
+    exit(1);
 }
 
 
@@ -160,22 +145,22 @@ void Count(){
 }
 
 void wiringPi_Init(){
-   pinMode(COLOR_S0,OUTPUT);
-   pinMode(COLOR_S1,OUTPUT);
-   pinMode(COLOR_S2,OUTPUT);
-   pinMode(COLOR_S3,OUTPUT);
-   pinMode(COLOR_OUT,INPUT);
-   pinMode(COLOR_LED,OUTPUT);
-   pinMode(BUZZER, OUTPUT);
+    pinMode(COLOR_S0,OUTPUT);
+    pinMode(COLOR_S1,OUTPUT);
+    pinMode(COLOR_S2,OUTPUT);
+    pinMode(COLOR_S3,OUTPUT);
+    pinMode(COLOR_OUT,INPUT);
+    pinMode(COLOR_LED,OUTPUT);
+    pinMode(BUZZER, OUTPUT);
 
-   digitalWrite(LED_RED,0);
-   digitalWrite(LED_GREEN,0);
-   digitalWrite(LED_BLUE,1);
- 
-   digitalWrite (COLOR_S0, 0);
-   digitalWrite(COLOR_S1, 1);
-   digitalWrite(COLOR_LED, 1);
-   wiringPiISR(COLOR_OUT,INT_EDGE_RISING,&Count);
+    digitalWrite(LED_RED,0);
+    digitalWrite(LED_GREEN,0);
+    digitalWrite(LED_BLUE,1);
+
+    digitalWrite (COLOR_S0, 0);
+    digitalWrite(COLOR_S1, 1);
+    digitalWrite(COLOR_LED, 1);
+    wiringPiISR(COLOR_OUT,INT_EDGE_RISING,&Count);
 }
 
 void *pir()
@@ -184,13 +169,13 @@ void *pir()
     wiringPiISR(PIR_D, INT_EDGE_RISING, &PIR_interrupt);
     while(1)
     {
-    
-       if(pir_flag == 1)
-       {
-         count_p++;
-         pir_flag = 0;
-       }
-  }
+
+        if(pir_flag == 1)
+        {
+            count_p++;
+            pir_flag = 0;
+        }
+    }
 }
 
 void *led(void *arg)
@@ -203,7 +188,7 @@ void *led(void *arg)
     {
         sleep(1);
 
-        if(count_p >= 15)
+        if(count_p >= 20)
         {
             pthread_mutex_lock(&mutx);
             passok = 1;
@@ -211,9 +196,8 @@ void *led(void *arg)
             digitalWrite(LED_GREEN,0);
             digitalWrite(LED_BLUE,0);
 
-            s_data sData;
-                memset(&sData, 0, sizeof(s_data));
-                strcpy(sData.message, "Warning");
+            s_data sData; memset(&sData, 0, sizeof(s_data));
+            strcpy(sData.message, "Warning");
 
             int recv_flag = send_message((int)arg, sData);
 
@@ -242,6 +226,8 @@ void *card_input(void *arg) {
             digitalWrite(LED_BLUE,0);
             digitalWrite(LED_GREEN,1);
 
+            sleep(2);
+
             digitalWrite(LED_RED,0);
             digitalWrite(LED_BLUE,1);
             digitalWrite(LED_GREEN,0);
@@ -249,7 +235,7 @@ void *card_input(void *arg) {
             if(passok == 0) continue;
 
             // admin card
-            printf("\nCard Authentication Complete\n");
+            printf("Card Authentication Complete\n");
             count_p = 0;
             pir_flag = 0;
             passok = 0;
@@ -258,15 +244,13 @@ void *card_input(void *arg) {
             digitalWrite(LED_GREEN,1);
 
             s_data sData; memset(&sData, 0, sizeof(s_data));
-            sData.flag = 1;
+            sData.flag = 2;
             strcpy(sData.message, "Card Authentication Complete");
-            printf("length : %d\n", strlen(sData.message));
             write((int)arg, (void*)&sData, sizeof(sData));
         }
     }
     return NULL;
 }
-
 
 void *buzzer()
 {
@@ -301,13 +285,13 @@ void Detect_Color(char c)
         digitalWrite(COLOR_S3, 1);
     }
 }
- 
-void PIR_interrupt() 
+
+void PIR_interrupt()
 {
     pir_flag = 1 ;
 }
- 
- 
+
+
 void *Thread_Func(){
     while(1){
         if(color==0) { //RED

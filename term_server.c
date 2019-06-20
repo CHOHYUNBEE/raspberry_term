@@ -135,7 +135,7 @@ void * clnt_connection(void *arg)
     int i;
 
     while ((str_len = read(clnt_sock, (void*)&sData, sizeof(sData))) != 0) {
-
+        printf("[Client : %s] %s\n", clnt->addr,sData.message);
         fp=fopen("../log.txt","a+"); //file open
         if (fp == NULL)
             printf ("File Open ERROR.... \n");
@@ -143,26 +143,20 @@ void * clnt_connection(void *arg)
         if (sData.flag == 0) { //경고 모드(침입자 발생)
             if (strcmp(sData.message, "Warning") == 0) {
                 strcpy(sendmsg, "Warning message if you mistake, you enter this number /1457/\n");
+                sData.flag = 1;
 
-                printf("[Client : %s] %s\n", clnt->addr,sData.message);
                 acctime = what_time();
                 fputs(acctime, fp);
                 fputs("\n Client : ", fp);
                 fputs(sData.message, fp);
-
-                sData.flag = 1;
-
-                printf("[Server : %s] %s\n", clnt->addr,sendmsg);
                 fputs("\n Server : ", fp);
-                fputs(sendmsg, fp);
-                strcpy(sData.message,sendmsg);
+                fputs(sData.message, fp);
 
                 write(clnt_sock, (void*)&sData, sizeof(sData));
             }
         }
         else if (sData.flag == 1) { //보안코드 확인 모드
             if (strcmp(sData.message, "1457\n") == 0) { //경고 모드 해제
-                printf("[Client : %s] %s\n", clnt->addr,sData.message);
 
                 sData.message[strlen(sData.message)-1] = 0;
                 acctime = what_time();
@@ -171,13 +165,11 @@ void * clnt_connection(void *arg)
                 fputs(sData.message, fp);
 
                 memset(sData.message, 0, BUFSIZE);
-                strcpy(sendmsg, "Undo Warning Mode");
+                strcpy(sData.message, "Undo Warning Mode");
                 sData.flag = 1;
-                printf("[Server : %s] %s\n", clnt->addr,sendmsg);
 
                 fputs("\n Server : ", fp);
-                fputs(sendmsg, fp);
-                strcpy(sData.message,sendmsg);
+                fputs(sData.message, fp);
 
                 write(clnt_sock, (void*)&sData, sizeof(sData));
             }
@@ -187,15 +179,13 @@ void * clnt_connection(void *arg)
                 fputs(acctime, fp);
                 fputs("\n Client : ", fp);
                 fputs(sData.message, fp);
-                printf("[Client : %s] %s\n", clnt->addr,sData.message);
 
                 memset(sData.message, 0, BUFSIZE);
-                strcpy(sendmsg, "Invalid security code");
+                strcpy(sData.message, "Invalid security code");
                 sData.flag = 0;
-                printf("[Server : %s] %s\n", clnt->addr,sendmsg);
 
                 fputs("\n Server : ", fp);
-                fputs(sendmsg, fp);
+                fputs(sData.message, fp);
 
                 write(clnt_sock, (void*)&sData, sizeof(sData));
             }
