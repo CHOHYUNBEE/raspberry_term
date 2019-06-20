@@ -109,7 +109,7 @@ int main(int argc, char **argv)
 int send_message(int sock, s_data sData) /* 메시지 전송 쓰레드 실행 함수 */
 {
     write(sock, (void *) &sData, sizeof(sData));
-    printf("flag : %d\n", recv_data.flag);
+    printf("flag : %d\n", sData.flag);
     s_data recv_data;
     memset(&recv_data, 0, sizeof(s_data));
     read(sock, (void *) &recv_data, sizeof(recv_data));
@@ -245,7 +245,6 @@ void *card_input(void *arg) {
 
             // admin card
             printf("\nCard Authentication Complete\n");
-            printf("flag : %d\n", sData.flag);
             printf("length : %d\n", strlen(sData.message));
             count_p = 0;
             pir_flag = 0;
