@@ -113,9 +113,14 @@ int send_message(int sock, s_data sData) /* 메시지 전송 쓰레드 실행 �
     s_data recv_data; memset(&recv_data, 0, sizeof(s_data));
     read(sock, (void*)&recv_data, sizeof(recv_data));
 
-    printf("%s\ninput password : ", recv_data.message);
-    memset(recv_data.message, 0, BUFSIZE);
-    fgets(recv_data.message, BUFSIZE, stdin);
+    if (strcmp(recv_data.message, "Warning message if you mistake, you enter this number /1457/\n") == 0) {
+        if (strcpy(sData.message, "Card Authentication Complete") != 0) {
+            printf("%s\n", recv_data.message);
+            printf("input password : ");
+            memset(recv_data.message, 0, BUFSIZE);
+            fgets(recv_data.message, BUFSIZE, stdin);
+        }
+    }
 
     if(passok == 0) return 2;
 
@@ -124,7 +129,7 @@ int send_message(int sock, s_data sData) /* 메시지 전송 쓰레드 실행 �
     memset(&recv_data, 0, sizeof(recv_data));
     read(sock, (void*)&recv_data, sizeof(recv_data));
 
-    printf("%s",recv_data.message);
+    printf("%s\n",recv_data.message);
 
     return recv_data.flag;
 }
@@ -190,7 +195,7 @@ void *led(void *arg)
     {
         sleep(1);
 
-        if(count_p >= 20)
+        if(count_p >= 15)
         {
             pthread_mutex_lock(&mutx);
             passok = 1;
