@@ -135,7 +135,6 @@ void * clnt_connection(void *arg)
     int i;
 
     while ((str_len = read(clnt_sock, (void*)&sData, sizeof(sData))) != 0) {
-        printf("[Client : %s] %s\n", clnt->addr,sData.message);
         fp=fopen("../log.txt","a+"); //file open
         if (fp == NULL)
             printf ("File Open ERROR.... \n");
@@ -153,6 +152,7 @@ void * clnt_connection(void *arg)
 
                 fputs("\n Server : ", fp);
                 fputs(sData.message, fp);
+                printf("%s", sData.message);
 
                 write(clnt_sock, (void*)&sData, sizeof(sData));
             }
@@ -166,8 +166,8 @@ void * clnt_connection(void *arg)
                 fputs("\n Client : ", fp);
                 fputs(sData.message, fp);
 
-                memset(sData.message, 0, BUFSIZE);
-                strcpy(sendmsg, "Undo Warning Mode");
+                memset(sData.message, 0, sizeof(sData.message));
+                strcpy(sData.message, "Undo Warning Mode");
                 sData.flag = 1;
 
                 fputs("\n Server : ", fp);
@@ -182,8 +182,8 @@ void * clnt_connection(void *arg)
                 fputs("\n Client : ", fp);
                 fputs(sData.message, fp);
 
-                memset(sData.message, 0, BUFSIZE);
-                strcpy(sendmsg, "Invalid security code");
+                memset(sData.message, 0, sizeof(sData.message));
+                strcpy(sData.message, "Invalid security code");
                 sData.flag = 0;
 
                 fputs("\n Server : ", fp);
