@@ -115,11 +115,13 @@ int send_message(int sock, s_data sData) /* 메시지 전송 쓰레드 실행 �
     read(sock, (void *) &recv_data, sizeof(recv_data));
 
     if (strcmp(recv_data.message, "Warning message if you mistake, you enter this number /1457/\n") == 0) {
-        printf("%s\ninput password : ", recv_data.message);
-        memset(recv_data.message, 0, BUFSIZE);
-        fgets(recv_data.message, BUFSIZE, stdin);
+        if( strcpy(sData.message, "Card Authentication Complete")!=0) {
+            printf("%s\ninput password : ", recv_data.message);
+            memset(recv_data.message, 0, BUFSIZE);
+            fgets(recv_data.message, BUFSIZE, stdin);
+        }
     }
-    printf("[Server Message] %s\n", recv_data.message);
+    printf("%s\n", recv_data.message);
 
     if(passok == 0) return 2;
 
@@ -237,7 +239,7 @@ void *card_input(void *arg) {
             if(passok == 0) continue;
 
             // admin card
-            printf("Card Authentication Complete\n");
+            printf("\nCard Authentication Complete\n");
             count_p = 0;
             pir_flag = 0;
             passok = 0;
