@@ -171,7 +171,7 @@ void * clnt_connection(void *arg)
                 fputs(sData.message, fp);
 
                 memset(sData.message, 0, BUFSIZE);
-                strcpy(sData.message, "Undo Warning Mode");
+                strcpy(sendmsg, "Undo Warning Mode");
                 sData.flag = 1;
                 printf("[Server : %s] %s\n", clnt->addr,sendmsg);
 
@@ -190,7 +190,7 @@ void * clnt_connection(void *arg)
                 printf("[Client : %s] %s\n", clnt->addr,sData.message);
 
                 memset(sData.message, 0, BUFSIZE);
-                strcpy(sData.message, "Invalid security code");
+                strcpy(sendmsg, "Invalid security code");
                 sData.flag = 0;
                 printf("[Server : %s] %s\n", clnt->addr,sendmsg);
 
