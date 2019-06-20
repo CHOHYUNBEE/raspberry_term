@@ -142,6 +142,7 @@ void * clnt_connection(void *arg)
         if (sData.flag == 0) { //경고 모드(침입자 발생)
             if (strcmp(sData.message, "Warning") == 0) {
                 acctime = what_time();
+                printf("[Client : %s] %s\n", clnt->addr,sData.message);
                 fputs(acctime, fp);
                 fputs("\n Client : ", fp);
                 fputs(sData.message, fp);
@@ -150,6 +151,7 @@ void * clnt_connection(void *arg)
                 strcpy(sData.message, "Warning message if you mistake, you enter this number /1457/\n");
                 sData.flag = 1;
 
+                printf("[Server : %s] %s\n", clnt->addr,sData.message);
                 fputs("\n Server : ", fp);
                 fputs(sData.message, fp);
                 printf("%s", sData.message);
@@ -162,13 +164,16 @@ void * clnt_connection(void *arg)
 
                 sData.message[strlen(sData.message)-1] = 0;
                 acctime = what_time();
+                printf("[Client : %s] %s\n", clnt->addr,sData.message);
+
                 fputs(acctime, fp);
                 fputs("\n Client : ", fp);
                 fputs(sData.message, fp);
 
                 memset(sData.message, 0, sizeof(sData.message));
-                strcpy(sData.message, "Undo Warning Mode");
+                strcpy(sData.message, "Undo Warning Mode\n");
                 sData.flag = 1;
+                printf("[Server : %s] %s\n", clnt->addr,sData.message);
 
                 fputs("\n Server : ", fp);
                 fputs(sData.message, fp);
@@ -178,13 +183,16 @@ void * clnt_connection(void *arg)
             else{ //잘못된 보안코드 -> 다시 경고 모드로
                 sData.message[strlen(sData.message)-1] = 0;
                 acctime = what_time();
+                printf("[Client : %s] %s\n", clnt->addr,sData.message);
+
                 fputs(acctime, fp);
                 fputs("\n Client : ", fp);
                 fputs(sData.message, fp);
 
                 memset(sData.message, 0, sizeof(sData.message));
-                strcpy(sData.message, "Invalid security code");
+                strcpy(sData.message, "Invalid security code\n");
                 sData.flag = 0;
+                printf("[Server : %s] %s\n", clnt->addr,sData.message);
 
                 fputs("\n Server : ", fp);
                 fputs(sData.message, fp);
